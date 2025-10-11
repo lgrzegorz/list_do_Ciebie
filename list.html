@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>List do Ciebie</title>
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+:root {
+  --envelope-w: 400px;
+  --envelope-h: 300px;
+}
+html, body {
+  height: 100%;
+  margin: 0;
+}
+body {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #f7efe9, #fff);
+  font-family: 'Patrick Hand', cursive;
+  background-image: url(tlo.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow-x: hidden;
+}
+
+/* ---------------- Koperta ---------------- */
+.envelope-container {
+  position: relative;
+  width: var(--envelope-w);
+  height: var(--envelope-h);
+  perspective: 1000px;
+  transition: all 400ms ease;
+}
+
+.back {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #e74c3c, #c0392b);
+  border-radius: 12px;
+  z-index: 1;
+}
+
+/* podpis koperty */
+.signature {
+  position: absolute;
+  bottom: 10px;
+  left: 14px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.3;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.2);
+  z-index: 2;
+}
+
+/* przycisk otwórz */
+.open-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  color: #e74c3c;
+  font-weight: 700;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 24px;
+  cursor: pointer;
+  font-size: 16px;
+  z-index: 4;
+  transition: all 0.3s ease;
+}
+.open-btn:hover {
+  background: #ffe6e6;
+}
+.open-btn.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.flap {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 3;
+  background: linear-gradient(180deg, #ff6b6b, #e74c3c);
+  clip-path: polygon(0 0, 50% 45%, 100% 0, 100% 100%, 0 100%);
+  transform-origin: top center;
+  transform: rotateX(0deg);
+  transition: transform 700ms cubic-bezier(.2,.9,.25,1);
+  backface-visibility: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 0 18px 36px 0;
+}
+
+.address {
+  color: #fff;
+  font-weight: 700;
+  font-size: 18px;
+  pointer-events: none;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.2);
+  transition: opacity 400ms ease;
+}
+
+.letter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 85%;
+  min-height: 85%;
+  background: #fffef6;
+  border-radius: 8px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  transform: translate(-50%, -50%) translateY(50px);
+  opacity: 0;
+  transition: opacity 700ms ease, transform 700ms cubic-bezier(.2,.9,.25,1);
+  z-index: 2;
+}
+
+.letter p {
+  margin: 0;
+  text-align: center;
+}
+.title { font-weight: 700; margin-bottom: 10px; font-size: 20px; }
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: auto;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 500ms ease;
+}
+.buttons button {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 140px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.buttons button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+.buttons .yes { background: #2ecc71; color: #fff; }
+.buttons .yes:hover { background: #27ae60; }
+.buttons .no { background: #e74c3c; color: #fff; }
+.buttons .no:hover { background: #c0392b; }
+
+.envelope-container.open .flap { transform: rotateX(-180deg); }
+.envelope-container.open .address { opacity: 0; }
+.envelope-container.open .letter {
+  opacity: 1;
+  transform: translate(-50%, -50%) translateY(0);
+}
+.envelope-container.open .buttons {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* --------- druga strona listu ---------- */
+.second-page {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 85%;
+  min-height: 85%;
+  background: #fffef6;
+  border-radius: 8px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+  padding: 20px 20px 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  transform: translate(-50%, -50%) translateX(100%);
+  opacity: 0;
+  transition: transform 700ms cubic-bezier(.2,.9,.25,1), opacity 700ms ease;
+  z-index: 5;
+}
+
+.second-page.active {
+  transform: translate(-50%, -50%) translateX(0);
+  opacity: 1;
+}
+
+.second-page .title {
+  font-weight: 700;
+  margin-bottom: 10px;
+  font-size: 20px;
+}
+
+.back-arrow {
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  font-size: 22px;
+  cursor: pointer;
+  color: #e74c3c;
+  user-select: none;
+  transition: transform 0.2s;
+}
+.back-arrow:hover { transform: scale(1.1); }
+
+/* -------------------- MOBILE -------------------- */
+@media (max-width: 420px) {
+  :root { --envelope-w: 90vw; --envelope-h: 70vh; }
+  .open-btn { font-size: 14px; padding: 8px 20px; }
+}
+</style>
+</head>
+<body>
+<div class="envelope-container" id="envelopeContainer">
+  <div class="back"></div>
+  <div class="signature">
+    From: Grześ<br>
+    To: Oleńka
+  </div>
+  <button class="open-btn" id="openBtn">Otwórz</button>
+
+  <div class="letter" role="region" aria-hidden="true">
+    <div class="title">Najszczersze wyznanie</div>
+    <p>Hej Oleńko. <br><br>
+    Sens żeby to przeczytała ma tylko jeśli wciąż mnie kochasz. Chciałbym, żebyś jednak to przeczytała, wzięła bardzo do siebie i w to mocno uwierzyła, żebyś nie przed tym nie broniła, żebyś się rozbroiła.</p>
+    <div class="buttons">
+      <button class="yes">Chcę przeczytać</button>
+      <button class="no">Uciekam...</button>
+    </div>
+  </div>
+
+  <div class="second-page" id="secondPage">
+    <div class="back-arrow" id="backArrow">←</div>
+    <div class="title">List</div>
+    <p>Chciałbym zrobić wszystko z Tobą od nowa, bo wiem, że też w to wierzysz. <br>
+    Pewnie niejednokrotnie myślałaś, że odpuściłem, jednak odkąd Cię poznałem tak do dzisiaj nie było dnia żebym o Tobie nie myślał. Chyba nie muszę mówić jak dziwnie jest tyle Cię nie widzieć, nie mieć powiadomień na snapie, nie móc Cię miętosić. Niestety, niektóre rzeczy zaszły za daleko, ale wystarczy szczere uczucie i wiem, Ty zresztą też, że się uda. Będzie nas to kosztowało sporo pracy, na pewno nie będzie łatwo, ale wiem, że warto. Oczywiście miałem dni, w których wątpiłem, w których wydawało mi się, że wolałbym się w Tobie nigdy nie zakochać, ale to gówno prawda. Doświadczyłem prawdziwej miłości, ale też chaosu, na którego nie byłem gotowy, który nas zniszczył. Każdy dobry dzień z Tobą był najlepszym dniem w moim życiu, jakkolwiek to nie brzmi. Pozbądźmy się chaosu i bądźmy szczęśliwi, bo na to zasługujemy. Ta droga była wyboista, ale dalej jest wylany świeży asfalt :). Trzeba w to wierzyć, trzeba wierzyć, że ta droga nie prowadziła donikąd. Ja w to wierzę i chcę, żebyś Ty w to uwierzyła, żebyś była silna jak nigdy i spróbowała z moją pomocą zmierzyć się ze wszystkimi lękami. Na pewno nie jest na to za późno. <br>Kocham Cię, tęsknię.</p>
+  </div>
+</div>
+
+<script>
+const envelope = document.getElementById('envelopeContainer');
+const openBtn = document.getElementById('openBtn');
+const yesBtn = envelope.querySelector('.yes');
+const noBtn = envelope.querySelector('.no');
+const secondPage = document.getElementById('secondPage');
+const backArrow = document.getElementById('backArrow');
+
+openBtn.addEventListener('click', e => {
+  e.stopPropagation();
+  envelope.classList.add('open');
+  openBtn.classList.add('hide');
+});
+
+yesBtn.addEventListener('click', e => {
+  e.stopPropagation();
+  secondPage.classList.add('active');
+});
+
+noBtn.addEventListener('click', e => {
+  e.stopPropagation();
+  alert('Jeśli tak ma być, okej, kocham Cię.');
+});
+
+backArrow.addEventListener('click', e => {
+  e.stopPropagation();
+  secondPage.classList.remove('active');
+});
+</script>
+</body>
+</html>
