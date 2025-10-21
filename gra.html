@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Poranek z Grzesiem</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #1e1e1e;
+      color: #f5f5f5;
+      text-align: center;
+      padding: 40px;
+    }
+
+    #game-container {
+      max-width: 650px;
+      margin: auto;
+      background: #2e2e2e;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.6);
+    }
+
+    h1 {
+      color: #ffcc00;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.1em;
+      margin-bottom: 25px;
+      line-height: 1.5;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      margin: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-size: 1em;
+    }
+
+    button:hover {
+      background-color: #3e8e41;
+    }
+
+    .restart {
+      background-color: #0078d7;
+    }
+
+    .restart:hover {
+      background-color: #005ea3;
+    }
+
+    img {
+      margin-top: 20px;
+      border-radius: 10px;
+      max-width: 100%;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    }
+
+    .happy-ending {
+      color: #ffd700;
+      font-weight: bold;
+      font-size: 1.2em;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="game-container">
+    <h1>Poranek z Grzesiem</h1>
+    <p id="story">
+      Budzisz się z Cerberkiem na głowie, obok chrapie Grześ. Co robisz?
+    </p>
+    <div id="choices">
+      <button onclick="choose('budzik')">Obudź dziada</button>
+      <button onclick="choose('cerber')">Zdejmij Cerberka z głowy</button>
+    </div>
+  </div>
+
+  <script>
+    function showHappyEnding() {
+      const choices = document.getElementById("choices");
+      choices.innerHTML = `
+        <p class="happy-ending">Twoje wybory umożliwiły wam życie w szczęściu, przed wami piękne lata razem!</p>
+        <img src="rodzinka.png" alt="Rodzinka">
+        <br><button class="restart" onclick="restart()">Zagraj ponownie</button>
+      `;
+    }
+
+    function choose(option) {
+      const story = document.getElementById("story");
+      const choices = document.getElementById("choices");
+
+      // --- SCENARIUSZ 1: BUDZIK ---
+      if (option === "budzik") {
+        story.innerText = "Grześ mruczy coś niezrozumiale, przewraca się na drugi bok i chrapie dalej. Cerberek patrzy na ciebie. Co teraz?";
+        choices.innerHTML = `
+          <button onclick="choose('atak')">Robicie z Cerberkiem atak miłości dla dziada.</button>
+          <button onclick="choose('analiza')">Nie wstajesz, zaczynasz analizę</button>
+        `;
+      }
+
+      else if (option === "atak") {
+        story.innerText = "Atakujecie całusami dziada, Grześ wstaje i się cieszy, że tak go budzicie.";
+        choices.innerHTML = `
+          <button onclick="choose('obudzenie')">Pytasz Grzesia, czy wyjdzie z Cerberkiem.</button>
+          <button onclick="choose('przytulanie')">Przytulacie się we troje.</button>
+        `;
+      }
+
+      else if (option === "obudzenie") {
+        story.innerText = "Grześ zadowolony z tak miłej pobudki, wstaje, robi Ci herbatkę, ubiera Cerbusiowi bluzę i wychodzą na spacer.";
+        showHappyEnding();
+      }
+
+      else if (option === "przytulanie") {
+        story.innerText = "Przytulacie się we 3 — idealny poranek w pełnym cieple i miłości.";
+        showHappyEnding();
+      }
+
+      // --- ANALIZA (używana też w ścieżce z 'kiss_dog') ---
+      else if (option === "analiza") {
+        story.innerText = "Zaczynasz analizować, czy wam się uda, czy Grześ Cię kocha (Kocha bardzo). Humor spada w dół.";
+        choices.innerHTML = `
+          <button onclick="choose('przerwanie')">Przerywasz zbędne analizowanie</button>
+          <button onclick="choose('dalej')">Wciąż analizujesz</button>
+        `;
+      }
+
+      else if (option === "przerwanie") {
+        story.innerText = "Wygrywasz walkę z myślami, widzisz co jest tu i teraz — Grześ, Cerberek i wspólne plany na szczęście.";
+        showHappyEnding();
+      }
+
+      else if (option === "dalej") {
+        story.innerText = "Ciągle myślisz, mówisz Grzesiowi, że to przez niego... ale on chce tylko Cię wspierać i kochać.";
+        choices.innerHTML = `
+          <button onclick="choose('przeprosiny')">Przepraszasz Grzesia, bo wiesz, że to nie jego wina.</button>
+          <button onclick="choose('wyjscie')">Prosisz Grzegorza, żeby wyszedł, bo chcesz posiedzieć sama.</button>
+        `;
+      }
+
+      else if (option === "przeprosiny") {
+        story.innerText = "Po przeprosinach Grześ Cię tuli i zapewnia, że kocha Cię nad życie, jest z Ciebie dumny.";
+        showHappyEnding();
+      }
+
+      else if (option === "wyjscie") {
+        story.innerText = "Grzegorz wychodzi, siedzisz i myślisz dalej...";
+        choices.innerHTML = `
+          <button onclick="choose('przeprosiny')">Przepraszasz Grzesia, bo wiesz, że to nie jego wina.</button>
+          <button onclick="choose('czekasz')">Przeczekujesz myśli.</button>
+        `;
+      }
+
+      else if (option === "czekasz") {
+        story.innerText = "Po jakimś czasie myśli cichną, potem jest dobrze — ale wiesz, że schemat prawdopodobnie się powtórzy...";
+        choices.innerHTML = `<button class="restart" onclick="restart()">Zagraj ponownie</button>`;
+      }
+
+      // --- SCENARIUSZ 2: CERBER ---
+      else if (option === "cerber") {
+        story.innerText = "Zdejmujesz Cerberka z głowy. Mały piesek przeciąga się i domaga spaceru. Co robisz?";
+        choices.innerHTML = `
+          <button onclick="choose('budzisz_grzesia')">Budzisz Grzegorza i prosisz, żeby wyszedł z puniem.</button>
+          <button onclick="choose('idziesz_sama')">Wstajesz nie budząc Grzegorza i wychodzisz z puniem.</button>
+        `;
+      }
+
+      else if (option === "budzisz_grzesia") {
+        story.innerText = "Chłopaki idą na spacer, ale domagają się całusa na drogę.";
+        choices.innerHTML = `
+          <button onclick="choose('kiss_all')">Dajesz im kisska.</button>
+          <button onclick="choose('kiss_dog')">Dajesz kisska tylko Cerberkowi.</button>
+        `;
+      }
+
+      else if (option === "kiss_all") {
+        story.innerText = "Dajesz buziaka Grzesiowi i Cerberkowi — obaj wyglądają na szczęśliwych. Wychodzą, a Ty masz chwilę spokoju i chłopaki przynoszą niespodziankę ze spaceru.";
+        showHappyEnding();
+      }
+
+      else if (option === "kiss_dog") {
+        story.innerText = "Całujesz tylko Cerberka — Grześ udaje obrażonego, ale po chwili i tak się śmieje. Wychodzą razem, a Ty masz chwilę ciszy tylko dla siebie.";
+        choices.innerHTML = `
+          <button onclick="choose('buziaki')">Dajesz im kisska po powrocie, wiesz że Grześ o tym marzył od rana.</button>
+          <button onclick="choose('analiza')">Zaczynasz myśleć i analizować, czy Grześ Cię kocha i czy wam się uda.</button>
+        `;
+      }
+
+      else if (option === "buziaki") {
+        story.innerText = "Po powrocie chłopaków witasz ich buziakiem — Grześ się uśmiecha, Cerberek merda ogonem. Wszyscy razem siadacie do śniadania w pełni miłości.";
+        showHappyEnding();
+      }
+
+      else if (option === "idziesz_sama") {
+        story.innerText = "Idziesz z niuniem na spacerek. W tym czasie Grzegorz ma czas, żeby się rozbudzić. Wstaje, robi Ci matche i kanapeczkę, lub zaraz pojedzie po coś dobrego.";
+        choices.innerHTML = `
+          <button onclick="choose('wracasz_radosna')">Wracasz i wygłupiacie się we 3.</button>
+          <button onclick="choose('wracasz_zla')">Jesteś zła, bo zmarzłaś i denerwujesz się na dziada, że to on nie zmarzł.</button>
+        `;
+      }
+
+      else if (option === "wracasz_radosna") {
+        story.innerText = "Wracasz z Cerberkiem, Grześ czeka z uśmiechem. Wygłupiacie się, tulicie i śmiejecie – idealny poranek.";
+        showHappyEnding();
+      }
+
+      else if (option === "wracasz_zla") {
+        story.innerText = "Jesteś zła, bo zmarzłaś i denerwujesz się na dziada, że to on nie zmarzł.";
+        choices.innerHTML = `
+          <button onclick="choose('przeprosiny')">Przepraszasz Grzesia, bo wiesz, że to nie jego wina.</button>
+          <button onclick="choose('czekasz')">Przeczekujesz myśli.</button>
+        `;
+      }
+    }
+
+    function restart() {
+      location.reload();
+    }
+  </script>
+</body>
+</html>
